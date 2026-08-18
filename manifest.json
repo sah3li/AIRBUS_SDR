@@ -1,0 +1,15 @@
+{
+  "name": "AIRBUS SDR",
+  "short_name": "AIRBUS_SDR",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#0b192c",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3125/3125713.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
