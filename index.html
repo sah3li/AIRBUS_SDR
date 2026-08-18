@@ -12,13 +12,20 @@
         .search-container input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; background: #f9f9f9; outline: none; }
         .search-container input:focus { border-color: #0b192c; }
         #app-container { padding: 16px; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); padding-bottom: 80px; }
-        .card { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-right: 4px solid #3b82f6; direction: ltr; }
+        .card { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-right: 4px solid #3b82f6; direction: ltr; transition: 0.3s; }
+        .card.read { opacity: 0.6; border-right-color: #94a3b8; background: #f8fafc; }
+        .card-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .row-number { background: #3b82f6; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .card.read .row-number { background: #94a3b8; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
         .card-title { font-size: 18px; font-weight: bold; color: #1e293b; margin: 0; }
         .badge-date { background: #e2e8f0; color: #475569; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; }
         .card-body p { margin: 6px 0; font-size: 14px; color: #334155; line-height: 1.4; }
         .card-body strong { color: #0f172a; }
         .badge-condition { display: inline-block; padding: 3px 8px; background: #fee2e2; color: #991b1b; border-radius: 4px; font-size: 12px; font-weight: bold; margin-top: 4px; }
+        .card-actions { margin-top: 12px; text-align: right; border-top: 1px solid #eee; padding-top: 12px; }
+        .btn-read { background: #e2e8f0; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; color: #475569; transition: 0.2s; }
+        .btn-read.active { background: #10b981; color: white; }
         .loader { text-align: center; padding: 20px; color: #64748b; font-weight: bold; }
     </style>
 </head>
