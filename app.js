@@ -9,7 +9,12 @@ Papa.parse(sheetCSV, {
     header: true,
     skipEmptyLines: true,
     complete: function(results) {
-        appData = results.data.filter(row => row.AircraftMake || row.AircraftModel || row.PartName);
+        // إضافة رقم السطر الأصلي لكل صف (السطر 1 عناوين، البيانات تبدأ من 2)
+        appData = results.data.map((row, index) => {
+            row.originalRowNumber = index + 2;
+            return row;
+        }).filter(row => row.AircraftMake || row.AircraftModel || row.PartName);
+        
         renderCards(appData);
     },
     error: function(err) {
@@ -24,9 +29,16 @@ function renderCards(data) {
         return;
     }
 
+    // جلب البيانات المحفوظة للبطاقات المقروءة
+    const readCards = JSON.parse(localStorage.getItem('readCards')) || [];
+
     data.forEach(row => {
         const card = document.createElement('div');
-        card.className = 'card';
+        const rowNum = row.originalRowNumber;
+        const isRead = readCards.includes(rowNum);
+        
+        card.className = `card ${isRead ? 'read' : ''}`;
+        card.id = `card-${rowNum}`;
         
         const makeModel = `${row.AircraftMake || ''} ${row.AircraftModel || ''}`.trim();
         const partName = row.PartName || 'Unknown Part';
@@ -36,15 +48,23 @@ function renderCards(data) {
         const date = row.DifficultyDate || '--/--/----';
 
         card.innerHTML = `
+            <div class="card-header-top">
+                <span class="row-number">Row #${rowNum}</span>
+                <span class="badge-date">${date}</span>
+            </div>
             <div class="card-header">
                 <h3 class="card-title">${makeModel}</h3>
-                <span class="badge-date">${date}</span>
             </div>
             <div class="card-body">
                 <p><strong>Part:</strong> ${partName} ${partNum}</p>
                 <p><strong>Location:</strong> ${row.PartLocation || 'N/A'}</p>
                 <p><strong>Discrepancy:</strong> ${discrepancy}</p>
                 <span class="badge-condition">${condition}</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-read ${isRead ? 'active' : ''}" onclick="toggleRead(${rowNum}, this)">
+                    ${isRead ? '✔ Read' : 'Mark as Read'}
+                </button>
             </div>
         `;
         container.appendChild(card);
@@ -60,3 +80,22 @@ searchInput.addEventListener('input', (e) => {
     });
     renderCards(filtered);
 });
+
+// دالة تغيير حالة القراءة وحفظها
+window.toggleRead = function(rowNum, btn) {
+    let readCards = JSON.parse(localStorage.getItem('readCards')) || [];
+    const card = document.getElementById(`card-${rowNum}`);
+    
+    if (readCards.includes(rowNum)) {
+        readCards = readCards.filter(id => id !== rowNum);
+        btn.className = 'btn-read';
+        btn.innerText = 'Mark as Read';
+        card.classList.remove('read');
+    } else {
+        readCards.push(rowNum);
+        btn.className = 'btn-read active';
+        btn.innerText = '✔ Read';
+        card.classList.add('read');
+    }
+    localStorage.setItem('readCards', JSON.stringify(readCards));
+};
